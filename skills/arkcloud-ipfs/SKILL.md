@@ -1,0 +1,97 @@
+---
+name: arkcloud-ipfs
+description: Upload, publish, list, and delete files through ARKCloud IPFS at file.arklink.hk. Use when the user mentions ARKCloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud short URL, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
+metadata:
+  cowagent:
+    requires:
+      env:
+        - ARKCLOUD_UPLOAD_TOKEN
+---
+
+# ARKCloud IPFS
+
+Use ARKCloud's token-protected upload API. Do not call or expose the raw Kubo API or gateway API. Public uploads must go through `/api/upload`.
+
+## Configuration
+
+- `ARKCLOUD_BASE_URL`: optional, defaults to `https://file.arklink.hk`.
+- `ARKCLOUD_UPLOAD_TOKEN`: bearer token for `POST /api/upload`.
+- `ARKCLOUD_CLIENT_COOKIE`: optional browser/client session cookie for client APIs.
+- `ARKCLOUD_CSRF_TOKEN`: optional CSRF token for client upload/delete APIs.
+
+Never print, store, or commit plaintext tokens, session cookies, admin tokens, wallet private keys, seed phrases, or `.env` files. If the user asks to upload secrets, warn them and ask for confirmation before proceeding.
+
+## Upload A File
+
+Use the bearer-token upload helper for normal file uploads:
+
+```bash
+python <base_dir>/scripts/arkcloud_upload.py /path/to/file
+```
+
+The helper posts to `POST /api/upload` with `Authorization: Bearer <ARKCLOUD_UPLOAD_TOKEN>` and returns JSON containing:
+
+- `cid`
+- `bytes`
+- `credits_charged`
+- `credits_remaining`
+- `filename`
+- `duplicate`
+- `short_url`
+- `url`
+
+If `duplicate` is true, ARKCloud returned an existing upload record and charged `0` credits.
+
+## Upload A Folder
+
+Folder upload requires a logged-in client session because it uses `POST /api/client/upload/folder` with CSRF protection.
+
+```bash
+python <base_dir>/scripts/arkcloud_upload.py /path/to/folder --folder
+```
+
+If `ARKCLOUD_CLIENT_COOKIE` or `ARKCLOUD_CSRF_TOKEN` is missing, tell the user to upload the folder from `https://file.arklink.hk/` or provide a valid client session and CSRF token. Do not attempt to bypass this through raw IPFS endpoints.
+
+## List Uploads
+
+Listing uploads requires a logged-in client session:
+
+```bash
+python <base_dir>/scripts/arkcloud_list.py
+```
+
+It calls `GET /api/client/uploads` and prints the upload records as JSON.
+
+## Delete Or Unpublish Uploads
+
+Deleting uploads requires a logged-in client session and CSRF token:
+
+```bash
+python <base_dir>/scripts/arkcloud_delete.py <upload_id>
+```
+
+It calls `DELETE /api/client/uploads/{upload_id}`. Treat this as destructive: confirm with the user before deleting unless they explicitly asked for deletion.
+
+## Error Handling
+
+- Missing `ARKCLOUD_UPLOAD_TOKEN`: ask the user to configure a token from the ARKCloud wallet/client UI.
+- `401` or `403`: token/session is missing, expired, inactive, or lacks CSRF.
+- Insufficient credits: report `credits_required` and `credits_balance` if present.
+- File too large or invalid path: report the path and avoid retrying unchanged.
+- Service unavailable: check `GET /api/health` or ask whether to retry later.
+
+## Publishing
+
+This skill is installable from GitHub when the repo keeps this path:
+
+```text
+skills/arkcloud-ipfs/SKILL.md
+```
+
+Install examples:
+
+```text
+/skill install ARK-Interlink/arkcloud-ipfs-skill#skills/arkcloud-ipfs
+cow skill install ARK-Interlink/arkcloud-ipfs-skill#skills/arkcloud-ipfs
+```
+

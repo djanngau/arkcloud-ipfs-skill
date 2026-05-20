@@ -1,12 +1,27 @@
 ---
 name: arkcloud-ipfs
 description: ARKCloud IPFS OpenClaw skill for file.arklink.hk. Upload, publish, list, and delete files through ARKCloud and return IPFS CID, short URL, credit usage, and duplicate status. Use when the user searches or mentions arkcloud, ARKCloud, arkcloud-ipfs, ARK Cloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud short URL, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
+version: 0.1.3
 metadata:
-  homepage: https://github.com/djanngau/arkcloud-ipfs-skill
-  primaryEnv: ARKCLOUD_UPLOAD_TOKEN
-  requires:
-    env:
-      - ARKCLOUD_UPLOAD_TOKEN
+  openclaw:
+    homepage: https://github.com/djanngau/arkcloud-ipfs-skill
+    primaryEnv: ARKCLOUD_UPLOAD_TOKEN
+    requires:
+      env:
+        - ARKCLOUD_UPLOAD_TOKEN
+    envVars:
+      - name: ARKCLOUD_UPLOAD_TOKEN
+        required: true
+        description: Bearer token for the ARKCloud file upload API.
+      - name: ARKCLOUD_BASE_URL
+        required: false
+        description: Optional ARKCloud base URL. Defaults to https://file.arklink.hk.
+      - name: ARKCLOUD_CLIENT_COOKIE
+        required: false
+        description: Optional logged-in client session cookie for listing, folder upload, and delete helpers.
+      - name: ARKCLOUD_CSRF_TOKEN
+        required: false
+        description: Optional CSRF token used with the client session helpers.
 ---
 
 # ARKCloud IPFS

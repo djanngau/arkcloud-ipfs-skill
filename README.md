@@ -1,27 +1,29 @@
-# ARKCloud IPFS Skill
+# ARKCloud IPFS Skill for OpenClaw
 
-ARKCloud IPFS skill for OpenClaw, CowAgent, and other agents that support `SKILL.md`.
+ARKCloud IPFS OpenClaw skill for OpenClaw, CowAgent, Claude Code, and other agents that support `SKILL.md`.
 
 This skill uploads files to the ARKCloud/IPFS upload API at `https://file.arklink.hk`, returns the resulting CID, short URL, credit usage, and duplicate status, and provides optional helpers for listing or deleting uploads when a client session is available.
+
+Keywords: `arkcloud`, `ARKCloud`, `arkcloud-ipfs`, `ARK Cloud`, `openclaw-skill`, `cowagent-skill`, `claude-code-skill`, `ipfs`, `cid`, `file.arklink.hk`, `decentralized-storage`.
 
 ## Install
 
 From a GitHub repo:
 
 ```text
-/skill install ARK-Interlink/arkcloud-ipfs-skill#skills/arkcloud-ipfs
+/skill install djanngau/arkcloud-ipfs-skill#skills/arkcloud-ipfs
 ```
 
 Terminal form:
 
 ```bash
-cow skill install ARK-Interlink/arkcloud-ipfs-skill#skills/arkcloud-ipfs
+cow skill install djanngau/arkcloud-ipfs-skill#skills/arkcloud-ipfs
 ```
 
 From a release zip:
 
 ```text
-/skill install https://github.com/ARK-Interlink/arkcloud-ipfs-skill/releases/latest/download/arkcloud-ipfs.zip
+/skill install https://github.com/djanngau/arkcloud-ipfs-skill/releases/latest/download/arkcloud-ipfs.zip
 ```
 
 ## Configure
@@ -46,4 +48,3 @@ export ARKCLOUD_CSRF_TOKEN="<csrf>"
 ```
 
 Never commit real tokens, cookies, admin secrets, wallet private keys, or `.env` files.
-

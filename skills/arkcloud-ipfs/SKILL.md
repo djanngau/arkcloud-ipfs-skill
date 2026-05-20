@@ -1,14 +1,17 @@
 ---
 name: arkcloud-ipfs
-description: Upload, publish, list, and delete files through ARKCloud IPFS at file.arklink.hk. Use when the user mentions ARKCloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud short URL, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
+description: ARKCloud IPFS OpenClaw skill for file.arklink.hk. Upload, publish, list, and delete files through ARKCloud and return IPFS CID, short URL, credit usage, and duplicate status. Use when the user searches or mentions arkcloud, ARKCloud, arkcloud-ipfs, ARK Cloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud short URL, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
 metadata:
-  cowagent:
-    requires:
-      env:
-        - ARKCLOUD_UPLOAD_TOKEN
+  homepage: https://github.com/djanngau/arkcloud-ipfs-skill
+  primaryEnv: ARKCLOUD_UPLOAD_TOKEN
+  requires:
+    env:
+      - ARKCLOUD_UPLOAD_TOKEN
 ---
 
 # ARKCloud IPFS
+
+Keywords: arkcloud, ARKCloud, arkcloud-ipfs, ARK Cloud, OpenClaw skill, CowAgent skill, Claude Code skill, IPFS, CID, file.arklink.hk, decentralized storage, upload API.
 
 Use ARKCloud's token-protected upload API. Do not call or expose the raw Kubo API or gateway API. Public uploads must go through `/api/upload`.
 
@@ -91,7 +94,6 @@ skills/arkcloud-ipfs/SKILL.md
 Install examples:
 
 ```text
-/skill install ARK-Interlink/arkcloud-ipfs-skill#skills/arkcloud-ipfs
-cow skill install ARK-Interlink/arkcloud-ipfs-skill#skills/arkcloud-ipfs
+/skill install djanngau/arkcloud-ipfs-skill#skills/arkcloud-ipfs
+cow skill install djanngau/arkcloud-ipfs-skill#skills/arkcloud-ipfs
 ```
-

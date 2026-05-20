@@ -13,6 +13,10 @@ from urllib.request import Request, urlopen
 
 
 DEFAULT_BASE_URL = "https://file.arklink.hk"
+DEFAULT_HEADERS = {
+    "User-Agent": "ARKCloud-IPFS-Skill/0.1 (+https://github.com/djanngau/arkcloud-ipfs-skill)",
+    "Accept": "application/json",
+}
 
 
 def base_url(value: str | None = None) -> str:
@@ -34,7 +38,8 @@ def request_json(
     body: bytes | None = None,
     timeout: int = 120,
 ) -> dict[str, Any] | list[Any]:
-    req = Request(url, data=body, method=method.upper(), headers=headers or {})
+    request_headers = {**DEFAULT_HEADERS, **(headers or {})}
+    req = Request(url, data=body, method=method.upper(), headers=request_headers)
     try:
         with urlopen(req, timeout=timeout) as resp:
             raw = resp.read()
@@ -67,4 +72,3 @@ def endpoint(root: str, path: str) -> str:
 def print_json(payload: Any) -> None:
     json.dump(payload, sys.stdout, ensure_ascii=False, indent=2)
     sys.stdout.write("\n")
-

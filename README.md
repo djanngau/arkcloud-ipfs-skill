@@ -2,7 +2,7 @@
 
 ARKCloud IPFS OpenClaw skill for OpenClaw, CowAgent, Claude Code, and other agents that support `SKILL.md`.
 
-This skill uploads files to the ARKCloud/IPFS upload API at `https://file.arklink.hk`, returns the resulting CID, access link, credit usage, and duplicate status, and provides optional helpers for listing or deleting uploads when a client session is available. Upload responses show the CID and access link, and agents should prompt users to open the link when they want to view or share the uploaded file.
+This skill uploads files to the ARKCloud/IPFS upload API at `https://file.arklink.hk`, returns the resulting CID, access link, credit usage, and duplicate status, and provides optional helpers for listing or deleting uploads when a client session is available. After upload, agents should show CID, filename, size, link, credits charged, and credits remaining, then prompt users to open the link when they want to view or share the uploaded file.
 
 Keywords: `arkcloud`, `ARKCloud`, `arkcloud-ipfs`, `ARK Cloud`, `openclaw-skill`, `cowagent-skill`, `claude-code-skill`, `ipfs`, `cid`, `file.arklink.hk`, `decentralized-storage`.
 

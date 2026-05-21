@@ -1,7 +1,7 @@
 ---
 name: arkcloud-ipfs
-description: ARKCloud IPFS OpenClaw skill for file.arklink.hk. Upload, publish, list, and delete files through ARKCloud and return IPFS CID, short URL, credit usage, and duplicate status. Use when the user searches or mentions arkcloud, ARKCloud, arkcloud-ipfs, ARK Cloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud short URL, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
-version: 0.1.3
+description: ARKCloud IPFS OpenClaw skill for file.arklink.hk. Upload, publish, list, and delete files through ARKCloud and return IPFS CID, access link, credit usage, and duplicate status. Use when the user searches or mentions arkcloud, ARKCloud, arkcloud-ipfs, ARK Cloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud file link, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
+version: 0.1.4
 metadata:
   openclaw:
     homepage: https://github.com/djanngau/arkcloud-ipfs-skill
@@ -59,6 +59,8 @@ The helper posts to `POST /api/upload` with `Authorization: Bearer <ARKCLOUD_UPL
 - `url`
 
 If `duplicate` is true, ARKCloud returned an existing upload record and charged `0` credits.
+
+Show the user both the CID and the access link. Prompt the user to open the link when they want to view or share the uploaded file. In user-facing copy, call it the access link or file link.
 
 ## Upload A Folder
 

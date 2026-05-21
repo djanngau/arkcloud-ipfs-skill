@@ -54,6 +54,7 @@ def normalize_result(payload: dict, root: str) -> dict:
     result = {"ok": True, **payload}
     short_url = payload.get("short_url") or payload.get("cid_url")
     if isinstance(short_url, str) and short_url:
+        result["short_url"] = short_url
         result["url"] = short_url if short_url.startswith("http") else root.rstrip("/") + short_url
     return result
 
@@ -112,4 +113,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

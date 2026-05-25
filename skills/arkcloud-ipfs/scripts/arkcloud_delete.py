@@ -4,10 +4,9 @@
 from __future__ import annotations
 
 import argparse
-import os
 from urllib.parse import quote
 
-from arkcloud_common import base_url, endpoint, fail, print_json, request_json
+from arkcloud_common import base_url, endpoint, print_json, request_json, require_env
 
 
 def main() -> None:
@@ -16,10 +15,14 @@ def main() -> None:
     parser.add_argument("--base-url", default=None, help="ARKCloud base URL")
     args = parser.parse_args()
 
-    cookie = os.environ.get("ARKCLOUD_CLIENT_COOKIE")
-    csrf = os.environ.get("ARKCLOUD_CSRF_TOKEN")
-    if not cookie or not csrf:
-        fail("Delete requires ARKCLOUD_CLIENT_COOKIE and ARKCLOUD_CSRF_TOKEN from a logged-in client session")
+    cookie = require_env(
+        "ARKCLOUD_CLIENT_COOKIE",
+        "Delete requires ARKCLOUD_CLIENT_COOKIE and ARKCLOUD_CSRF_TOKEN from a logged-in client session",
+    )
+    csrf = require_env(
+        "ARKCLOUD_CSRF_TOKEN",
+        "Delete requires ARKCLOUD_CLIENT_COOKIE and ARKCLOUD_CSRF_TOKEN from a logged-in client session",
+    )
 
     upload_id = quote(args.upload_id, safe="")
     payload = request_json(
@@ -35,4 +38,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

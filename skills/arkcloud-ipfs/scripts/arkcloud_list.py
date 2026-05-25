@@ -4,9 +4,8 @@
 from __future__ import annotations
 
 import argparse
-import os
 
-from arkcloud_common import base_url, endpoint, fail, print_json, request_json
+from arkcloud_common import base_url, endpoint, print_json, request_json, require_env
 
 
 def main() -> None:
@@ -14,9 +13,10 @@ def main() -> None:
     parser.add_argument("--base-url", default=None, help="ARKCloud base URL")
     args = parser.parse_args()
 
-    cookie = os.environ.get("ARKCLOUD_CLIENT_COOKIE")
-    if not cookie:
-        fail("Listing uploads requires ARKCLOUD_CLIENT_COOKIE from a logged-in client session")
+    cookie = require_env(
+        "ARKCLOUD_CLIENT_COOKIE",
+        "Listing uploads requires ARKCLOUD_CLIENT_COOKIE from a logged-in client session",
+    )
 
     payload = request_json(
         "GET",
@@ -28,4 +28,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

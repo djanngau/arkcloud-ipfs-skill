@@ -9,7 +9,11 @@ import os
 import uuid
 from pathlib import Path
 
-from arkcloud_common import base_url, endpoint, fail, print_json, request_json
+from arkcloud_common import base_url, endpoint, fail, print_json, request_json, require_env
+
+
+def form_filename(value: str) -> str:
+    return value.replace("\\", "\\\\").replace('"', '\\"').replace("\r", "_").replace("\n", "_")
 
 
 def multipart_file(field: str, path: Path) -> tuple[bytes, str]:
@@ -17,7 +21,7 @@ def multipart_file(field: str, path: Path) -> tuple[bytes, str]:
     content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
     head = (
         f"--{boundary}\r\n"
-        f'Content-Disposition: form-data; name="{field}"; filename="{path.name}"\r\n'
+        f'Content-Disposition: form-data; name="{field}"; filename="{form_filename(path.name)}"\r\n'
         f"Content-Type: {content_type}\r\n\r\n"
     ).encode("utf-8")
     tail = f"\r\n--{boundary}--\r\n".encode("utf-8")
@@ -34,13 +38,16 @@ def multipart_folder(root: Path) -> tuple[bytes, str]:
             f"{root.name}\r\n"
         ).encode("utf-8")
     )
-    for path in sorted(p for p in root.rglob("*") if p.is_file()):
+    files = sorted(p for p in root.rglob("*") if p.is_file())
+    if not files:
+        fail(f"Folder has no files to upload: {root}")
+    for path in files:
         rel = path.relative_to(root).as_posix()
         content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         chunks.append(
             (
                 f"--{boundary}\r\n"
-                f'Content-Disposition: form-data; name="files"; filename="{rel}"\r\n'
+                f'Content-Disposition: form-data; name="files"; filename="{form_filename(rel)}"\r\n'
                 f"Content-Type: {content_type}\r\n\r\n"
             ).encode("utf-8")
         )
@@ -74,13 +81,16 @@ def main() -> None:
     if args.folder or target.is_dir():
         if not target.is_dir():
             fail("--folder requires a directory path")
-        cookie = os.environ.get("ARKCLOUD_CLIENT_COOKIE")
-        csrf = os.environ.get("ARKCLOUD_CSRF_TOKEN")
-        if not cookie or not csrf:
-            fail(
-                "Folder upload requires ARKCLOUD_CLIENT_COOKIE and ARKCLOUD_CSRF_TOKEN, "
-                "or use the ARKCloud web UI at https://file.arklink.hk/"
-            )
+        cookie = require_env(
+            "ARKCLOUD_CLIENT_COOKIE",
+            "Folder upload requires ARKCLOUD_CLIENT_COOKIE and ARKCLOUD_CSRF_TOKEN, "
+            "or use the ARKCloud web UI at https://file.arklink.hk/",
+        )
+        csrf = require_env(
+            "ARKCLOUD_CSRF_TOKEN",
+            "Folder upload requires ARKCLOUD_CLIENT_COOKIE and ARKCLOUD_CSRF_TOKEN, "
+            "or use the ARKCloud web UI at https://file.arklink.hk/",
+        )
         body, content_type = multipart_folder(target)
         payload = request_json(
             "POST",
@@ -95,9 +105,7 @@ def main() -> None:
         print_json(normalize_result(payload, root))
         return
 
-    token = os.environ.get("ARKCLOUD_UPLOAD_TOKEN")
-    if not token:
-        fail("Missing ARKCLOUD_UPLOAD_TOKEN")
+    token = require_env("ARKCLOUD_UPLOAD_TOKEN")
     body, content_type = multipart_file("file", target)
     payload = request_json(
         "POST",

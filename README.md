@@ -48,3 +48,18 @@ export ARKCLOUD_CSRF_TOKEN="<csrf>"
 ```
 
 Never commit real tokens, cookies, admin secrets, wallet private keys, or `.env` files.
+
+## Helpers
+
+```bash
+python skills/arkcloud-ipfs/scripts/arkcloud_health.py
+python skills/arkcloud-ipfs/scripts/arkcloud_upload.py /path/to/file
+python skills/arkcloud-ipfs/scripts/arkcloud_list.py
+python skills/arkcloud-ipfs/scripts/arkcloud_delete.py <upload_id>
+```
+
+Local validation:
+
+```bash
+python -m unittest discover -s tests
+```

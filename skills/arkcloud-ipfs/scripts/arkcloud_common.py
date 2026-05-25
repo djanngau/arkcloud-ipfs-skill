@@ -14,7 +14,7 @@ from urllib.request import Request, urlopen
 
 DEFAULT_BASE_URL = "https://file.arklink.hk"
 DEFAULT_HEADERS = {
-    "User-Agent": "ARKCloud-IPFS-Skill/0.1 (+https://github.com/djanngau/arkcloud-ipfs-skill)",
+    "User-Agent": "ARKCloud-IPFS-Skill/0.1.6 (+https://github.com/djanngau/arkcloud-ipfs-skill)",
     "Accept": "application/json",
 }
 
@@ -63,6 +63,13 @@ def request_json(
         fail("Timed out while contacting ARKCloud API")
     except json.JSONDecodeError as exc:
         fail(f"ARKCloud API returned invalid JSON: {exc}")
+
+
+def require_env(name: str, message: str | None = None) -> str:
+    value = os.environ.get(name)
+    if not value:
+        fail(message or f"Missing {name}")
+    return value
 
 
 def endpoint(root: str, path: str) -> str:

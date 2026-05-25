@@ -1,7 +1,7 @@
 ---
 name: arkcloud-ipfs
 description: ARKCloud IPFS OpenClaw skill for file.arklink.hk. Upload, publish, list, and delete files through ARKCloud and return IPFS CID, access link, credit usage, and duplicate status. Use when the user searches or mentions arkcloud, ARKCloud, arkcloud-ipfs, ARK Cloud, IPFS, CID, file.arklink.hk, uploading a file or folder to IPFS, getting an ARKCloud file link, querying uploaded resources, deleting or unpublishing an upload, or checking ARKCloud upload API health.
-version: 0.1.5
+version: 0.1.6
 metadata:
   openclaw:
     homepage: https://github.com/djanngau/arkcloud-ipfs-skill
@@ -90,6 +90,16 @@ python <base_dir>/scripts/arkcloud_list.py
 ```
 
 It calls `GET /api/client/uploads` and prints the upload records as JSON.
+
+## Check Health
+
+Use the health helper before retrying an upload when the service may be unavailable:
+
+```bash
+python <base_dir>/scripts/arkcloud_health.py
+```
+
+It calls `GET /api/health` and prints the service response as JSON.
 
 ## Delete Or Unpublish Uploads
 
